@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>钟表</title>
+	<script>
+		window.onload=function(){
+	　　　	var canvas=document.getElementById('canvas');
+			var ctx=canvas.getContext('2d');
+			ctx.fillStyle='white';
+			//画刻度
+			function drawCircle(x,y,r,deg1,deg2,width){
+				ctx.beginPath();
+				ctx.moveTo(x,y);
+				ctx.arc(x,y,r,deg1*Math.PI/180,deg2*Math.PI/180,false);
+				ctx.closePath();
+				ctx.lineWidth=width;
+				ctx.fill();
+			}
+			//画刻度
+			function drawScale(x,y,r,num,deg,width){
+				ctx.beginPath();
+				for(var i=0;i<num;i++){
+					ctx.moveTo(x,y);
+					ctx.arc(x,y,r,i*deg*Math.PI/180,(i+1)*deg*Math.PI/180,false);
+				}
+				ctx.closePath();
+				ctx.lineWidth=width;
+				ctx.stroke();
+			}
+			//画钟
+			function drawClock(){
+				var x=250;
+				var y=300;
+				var r=100;//时钟半径
+				var date=new Date();
+				var hour=date.getHours();
+				var minute=date.getMinutes();
+				var second=date.getSeconds();
+				var hourValue=-90+hour*30+minute/12;//时针转动弧长度数(设12点为0度)
+				var minuteValue=-90+minute*6;//分针转动弧长度数(设12点为0度)
+				var secondValue=-90+second*6;//秒针转动弧长度数(设12点为0度)
+
+				//分针格子
+				drawScale(x,y,r,60,6,1);
+				//圆盘
+				drawCircle(x,y,95,0,360,1);
+				//时针格子
+				drawScale(x,y,r,12,30,2);
+				//盖圆盘
+				drawCircle(x,y,90,0,360,1);
+				//画时针
+				drawCircle(x,y,r*10/20,hourValue,hourValue,2);
+				ctx.stroke();
+				//画分针
+				drawCircle(x,y,r*15/20,minuteValue,minuteValue,1);
+				ctx.stroke();
+				// //画秒针
+				drawCircle(x,y,r*19/20,secondValue,secondValue,0.5);
+				ctx.stroke();
+			}
+			setInterval(drawClock,80);
+		}
+	</script>
+	<style>
+		body{
+			background: #000;
+		}
+		*{
+			margin:0;
+			padding: 0;
+			margin:0 auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="600" style="background:#fff;">
+		<span>不支持canvas标签</span>
+	</canvas>
+</body>
+</html>
